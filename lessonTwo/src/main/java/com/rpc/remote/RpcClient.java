@@ -1,6 +1,7 @@
 package com.rpc.remote;
 
-import com.rpc.common.RpcRequest;
+import com.rpc.model.RpcRequest;
+import com.rpc.model.RpcResponse;
 import com.rpc.service.HelloService;
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
@@ -33,8 +34,8 @@ public class RpcClient {
     public static void main(String[] args) {
         RpcProxy rpcClientProxy = new RpcProxy("127.0.0.1", 9999);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        String hello = helloService.hello("this is a test");
-        System.out.println(hello);
+        RpcResponse<String> hello= helloService.hello("this is a test");
+        System.out.println(hello.getData());
     }
 
 }

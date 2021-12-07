@@ -1,6 +1,8 @@
 package com.rpc.remote;
 
-import com.rpc.common.RpcRequest;
+import com.rpc.model.RpcRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,6 +14,8 @@ import java.lang.reflect.Proxy;
  * @date: 2021/12/4
  */
 public class RpcProxy implements InvocationHandler {
+    private static final Logger log = LoggerFactory.getLogger(RpcProxy.class);
+
     private String host;
     private int port;
 
@@ -19,10 +23,8 @@ public class RpcProxy implements InvocationHandler {
         this.host = host;
         this.port = port;
     }
-
     /**
      * 获取代理对象
-     *
      * @param clazz
      * @param <T>
      * @return
@@ -39,7 +41,8 @@ public class RpcProxy implements InvocationHandler {
                 .paramTypes(method.getParameterTypes())
                 .build();
         RpcClient rpcClient = new RpcClient();
-        return rpcClient.sendRpcRequest(rpcRequest, host, port);
+        Object object = rpcClient.sendRpcRequest(rpcRequest, host, port);
+        return object;
     }
 
 

@@ -1,6 +1,8 @@
 package com.rpc.remote;
 
-import com.rpc.common.RpcRequest;
+import com.rpc.model.RpcRequest;
+import com.rpc.model.RpcResponse;
+import com.rpc.model.RpcResponseCode;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -33,16 +35,16 @@ public class RpcThread implements Runnable {
             outputStream = socket.getOutputStream();
             objectInputStream = new ObjectInputStream(inputStream);
             objectOutputStream = new ObjectOutputStream(outputStream);
+//            //接口名
+//            String methodName = rpcRequest.getMethodName();
+//            //接口参数
+//            Method method = service.getClass().getMethod(methodName, rpcRequest.getParamTypes());
+//            //参数
+//            Object[] parameters = rpcRequest.getParameters();
+            //            Object result = method.invoke(service, parameters);
             //读取到实体类
             RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
-            //接口名
-            String methodName = rpcRequest.getMethodName();
-            //接口参数
-            Method method = service.getClass().getMethod(methodName, rpcRequest.getParamTypes());
-            //参数
-            Object[] parameters = rpcRequest.getParameters();
-
-            Object result = method.invoke(service, parameters);
+            Object result = invokeTargetMethod(rpcRequest);
             objectOutputStream.writeObject(result);
             objectOutputStream.flush();
         } catch (IOException | ClassNotFoundException e) {
@@ -56,4 +58,19 @@ public class RpcThread implements Runnable {
         }
 
     }
+
+    private Object invokeTargetMethod(RpcRequest rpcRequest) throws NoSuchMethodException, ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+        Class<?> cls = Class.forName(rpcRequest.getInterfaceName());
+        // 判断类是否实现了对应的接口
+        if (!cls.isAssignableFrom(service.getClass())) {
+            return RpcResponse.fail(RpcResponseCode.NOT_FOUND_CLASS);
+        }
+        Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
+        if (null == method) {
+            return RpcResponse.fail(RpcResponseCode.NOT_FOUND_METHOD);
+        }
+        return method.invoke(service, rpcRequest.getParameters());
+    }
+
+
 }

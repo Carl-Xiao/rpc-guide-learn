@@ -1,11 +1,20 @@
 package com.rpc.model;
 
+import lombok.Builder;
+import lombok.Data;
+
+import java.io.Serializable;
+
 /**
- * @description: 实体类
+ * @description: rpc request
  * @author：carl
- * @date: 2021/12/4
+ * @date: 2021/12/7
  */
-public class RpcRequest {
-
-
+@Data
+@Builder
+public class RpcRequest implements Serializable {
+    private String interfaceName;
+    private String methodName;
+    private Object[] parameters;
+    private Class<?>[] paramTypes;
 }
