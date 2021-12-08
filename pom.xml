@@ -13,6 +13,7 @@
         <module>lessonTwo</module>
         <module>rpc-common</module>
         <module>lessonThree</module>
+        <module>lessonThree</module>
     </modules>
 
     <properties>
