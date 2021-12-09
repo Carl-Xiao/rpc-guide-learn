@@ -3,8 +3,7 @@ package com.rpc.remoting;
 import com.rpc.model.RpcRequest;
 import com.rpc.model.RpcResponse;
 import com.rpc.service.HelloService;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,9 +15,8 @@ import java.net.Socket;
  * @author：carl
  * @date: 2021/12/4
  */
+@Slf4j
 public class RegistryRpcClient {
-    public static final Logger logger = LoggerFactory.getLogger(RegistryRpcClient.class);
-
     public Object sendRpcRequest(RpcRequest rpcRequest, String host, int port) {
         try (Socket socket = new Socket(host, port)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -26,7 +24,7 @@ public class RegistryRpcClient {
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
             return objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            logger.error("occur exception:", e);
+            log.error("occur exception:", e);
         }
         return null;
     }

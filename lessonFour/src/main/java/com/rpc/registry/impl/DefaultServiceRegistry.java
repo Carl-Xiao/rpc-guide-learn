@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @description: 抽奖系统
+ * @description: 注册节点信息
  * @author：carl
  * @date: 2021/12/8
  */
@@ -17,8 +17,8 @@ public class DefaultServiceRegistry implements ServiceRegistry {
     /**
      * 并发类
      */
-    private Map<String, Object> serviceMap = new ConcurrentHashMap<>();
-    private final Set<String> registeredService = ConcurrentHashMap.newKeySet();
+    private static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
+    private static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
     /**
      * 使用同步锁

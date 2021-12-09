@@ -2,8 +2,7 @@ package com.rpc.remote;
 
 import com.rpc.service.HelloService;
 import com.rpc.service.impl.HelloServiceImpl;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,8 +14,8 @@ import java.util.concurrent.*;
  * @author：carl
  * @date: 2021/12/4
  */
+@Slf4j
 public class RpcServer {
-    private static final Logger logger = LoggerFactory.getLogger(RpcServer.class);
     private ExecutorService threadPool;
 
     public RpcServer() {
@@ -37,7 +36,7 @@ public class RpcServer {
     public void register(Object service, int port) {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            logger.debug("server start {}", port);
+            log.debug("server start {}", port);
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 //fix 一个小优化点阻塞io因此使用线程池的方式分担压力

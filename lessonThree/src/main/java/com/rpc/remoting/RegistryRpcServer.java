@@ -4,8 +4,7 @@ import com.rpc.registry.ServiceRegistry;
 import com.rpc.registry.impl.DefaultServiceRegistry;
 import com.rpc.service.HelloService;
 import com.rpc.service.impl.HelloServiceImpl;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,8 +16,8 @@ import java.util.concurrent.*;
  * @author：carl
  * @date: 2021/12/4
  */
+@Slf4j
 public class RegistryRpcServer {
-    private static final Logger logger = LoggerFactory.getLogger(RegistryRpcServer.class);
     private ExecutorService threadPool;
     private final ServiceRegistry serviceRegistry;
 
@@ -32,26 +31,6 @@ public class RegistryRpcServer {
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         this.threadPool = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, TimeUnit.MINUTES, workQueue, threadFactory);
     }
-
-    /**
-     * 注册服务
-     *
-     * @param service 代理服务
-     * @param port    端口号
-     */
-//    public void register(Object service, int port) {
-//        try {
-//            ServerSocket serverSocket = new ServerSocket(port);
-//            logger.debug("server start {}", port);
-//            Socket socket;
-//            while ((socket = serverSocket.accept()) != null) {
-//                //fix 一个小优化点阻塞io因此使用线程池的方式分担压力
-//                threadPool.execute(new RpcThread(socket, service));
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
     /**
      * 使用注册service
      *
@@ -60,7 +39,7 @@ public class RegistryRpcServer {
     public void start(int port) {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            logger.debug("server start {}", port);
+            log.debug("server start {}", port);
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 threadPool.execute(new RegistryRpcThread(socket, serviceRegistry));
