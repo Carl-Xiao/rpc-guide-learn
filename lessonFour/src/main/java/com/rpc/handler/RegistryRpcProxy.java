@@ -1,7 +1,7 @@
 package com.rpc.handler;
 
 import com.rpc.model.RpcRequest;
-import com.rpc.netty.RpcClient;
+import com.rpc.netty.client.RpcClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

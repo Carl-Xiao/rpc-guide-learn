@@ -1,4 +1,4 @@
-package com.rpc.netty;
+package com.rpc.netty.codec;
 
 import com.rpc.serialize.Serizlize;
 import io.netty.buffer.ByteBuf;

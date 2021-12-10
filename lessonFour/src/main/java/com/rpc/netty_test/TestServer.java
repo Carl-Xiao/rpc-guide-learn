@@ -1,6 +1,6 @@
 package com.rpc.netty_test;
 
-import com.rpc.netty.NettyServer;
+import com.rpc.netty.server.NettyServer;
 import com.rpc.registry.ServiceRegistry;
 import com.rpc.registry.impl.DefaultServiceRegistry;
 import com.rpc.service.HelloService;

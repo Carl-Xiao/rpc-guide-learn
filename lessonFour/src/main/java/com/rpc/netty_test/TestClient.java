@@ -2,8 +2,8 @@ package com.rpc.netty_test;
 
 import com.rpc.handler.RegistryRpcProxy;
 import com.rpc.model.RpcResponse;
-import com.rpc.netty.NettyClient;
-import com.rpc.netty.RpcClient;
+import com.rpc.netty.client.NettyClient;
+import com.rpc.netty.client.RpcClient;
 import com.rpc.service.HelloService;
 
 public class TestClient {

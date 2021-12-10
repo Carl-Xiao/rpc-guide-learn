@@ -1,4 +1,4 @@
-package com.rpc.netty;
+package com.rpc.netty.server;
 
 import com.rpc.handler.RpcRequestHandler;
 import com.rpc.model.RpcRequest;
