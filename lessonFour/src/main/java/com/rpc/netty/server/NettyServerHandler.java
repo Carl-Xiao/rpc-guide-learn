@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final RpcRequestHandler rpcRequestHandler;
-    private static ServiceRegistry serviceRegistry;
+    private static final String server_name = "netty-server-handler-rpc-pool";
     /**
      * 线程池
      */
@@ -27,9 +27,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     static {
         rpcRequestHandler = new RpcRequestHandler();
-        serviceRegistry = new DefaultServiceRegistry();
-        threadPool = ThreadPoolFactoryUtils.createDefaultThreadPool("netty-server-handler-rpc-pool");
-
+        threadPool = ThreadPoolFactoryUtils.createDefaultThreadPool(server_name);
     }
 
     @Override
@@ -38,9 +36,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             try {
                 RpcRequest rpcRequest = (RpcRequest) msg;
                 log.info(String.format("server receive msg: %s", rpcRequest));
-                String interfaceName = rpcRequest.getInterfaceName();
-                Object service = serviceRegistry.getService(interfaceName);
-                Object result = rpcRequestHandler.handle(rpcRequest, service);
+                Object result = rpcRequestHandler.handle(rpcRequest);
                 log.info(String.format("server get result: %s", result.toString()));
                 ChannelFuture f = ctx.writeAndFlush(RpcResponse.success(result, rpcRequest.getRequestId()));
                 f.addListener(ChannelFutureListener.CLOSE);
