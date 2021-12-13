@@ -1,5 +1,6 @@
 package com.rpc.handler;
 
+import cn.hutool.core.util.IdUtil;
 import com.rpc.model.RpcRequest;
 import com.rpc.netty.client.RpcClient;
 
@@ -32,7 +33,9 @@ public class RegistryRpcProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        String uuid = IdUtil.fastSimpleUUID();
         RpcRequest rpcRequest = RpcRequest.builder().methodName(method.getName())
+                .requestId(uuid)
                 .parameters(args)
                 .interfaceName(method.getDeclaringClass().getName())
                 .paramTypes(method.getParameterTypes())

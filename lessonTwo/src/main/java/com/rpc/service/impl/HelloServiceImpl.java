@@ -1,6 +1,5 @@
 package com.rpc.service.impl;
 
-import com.rpc.model.RpcResponse;
 import com.rpc.service.HelloService;
 
 /**
@@ -9,9 +8,8 @@ import com.rpc.service.HelloService;
  * @date: 2021/12/4
  */
 public class HelloServiceImpl implements HelloService {
-
     @Override
-    public RpcResponse<String> hello(String name) {
-        return RpcResponse.success("server:hello," + name);
+    public String hello(String name) {
+        return "server:hello," + name;
     }
 }

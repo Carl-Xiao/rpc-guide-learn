@@ -57,7 +57,7 @@ public class NettyClient implements RpcClient {
                     }
                 });
                 futureChannel.closeFuture().sync();
-                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse");
+                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
                 RpcResponse rpcResponse = futureChannel.attr(key).get();
                 return rpcResponse.getData();
             }

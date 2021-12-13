@@ -23,14 +23,21 @@ public class RpcResponse<T> implements Serializable {
      * 响应消息
      */
     private String message;
+
+    /**
+     * 请求ID
+     */
+    private String requestId;
     /**
      * 响应数据
      */
     private T data;
 
-    public static <T> RpcResponse<T> success(T data) {
+    public static <T> RpcResponse<T> success(T data, String requestId) {
         RpcResponse<T> response = new RpcResponse<>();
         response.setCode(RpcResponseCode.SUCCESS.getCode());
+        response.setMessage(RpcResponseCode.SUCCESS.getMessage());
+        response.setRequestId(requestId);
         if (null != data) {
             response.setData(data);
         }

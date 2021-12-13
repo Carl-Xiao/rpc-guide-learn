@@ -8,5 +8,5 @@ import com.rpc.model.RpcResponse;
  * @date: 2021/12/8
  */
 public interface HelloService {
-    RpcResponse<String> hello(String word);
+    String hello(String word);
 }

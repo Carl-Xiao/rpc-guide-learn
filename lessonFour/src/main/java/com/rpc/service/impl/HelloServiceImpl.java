@@ -1,6 +1,5 @@
 package com.rpc.service.impl;
 
-import com.rpc.model.RpcResponse;
 import com.rpc.service.HelloService;
 
 /**
@@ -10,7 +9,7 @@ import com.rpc.service.HelloService;
  */
 public class HelloServiceImpl implements HelloService {
     @Override
-    public RpcResponse<String> hello(String word) {
-        return RpcResponse.success("xbw");
+    public String hello(String word) {
+        return "xbw";
     }
 }

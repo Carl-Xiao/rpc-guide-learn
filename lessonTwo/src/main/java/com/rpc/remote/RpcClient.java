@@ -32,8 +32,8 @@ public class RpcClient {
     public static void main(String[] args) {
         RpcProxy rpcClientProxy = new RpcProxy("127.0.0.1", 9999);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        RpcResponse<String> hello= helloService.hello("this is a test");
-        System.out.println(hello.getData());
+        String hello = helloService.hello("this is a test");
+        System.out.println(hello);
     }
 
 }
