@@ -21,21 +21,21 @@ public class ZkServiceRegistry implements ServiceRegistry {
         zkClient.start();
     }
 
-    @Override
-    public void register(Object serviceName, InetSocketAddress socketAddress) {
-        StringBuilder servicePath = new StringBuilder(CuratorHelper.ZK_REGISTER_ROOT_PATH).append("/").append(serviceName);
+    public void register(String service, InetSocketAddress socketAddress) {
+        StringBuilder servicePath = new StringBuilder(CuratorHelper.ZK_REGISTER_ROOT_PATH).append("/").append(service);
         servicePath.append(socketAddress.toString());
         CuratorHelper.createEphemeralNode(zkClient, servicePath.toString());
         logger.info("节点创建成功，节点为:{}", servicePath);
     }
 
-    @Override
     public InetSocketAddress getService(String serviceName) {
+        //TODO 负载均衡算法添加
+
+
         String serviceAddress = CuratorHelper.getChildrenNodes(zkClient, serviceName).get(0);
-
-        InetSocketAddress socketAddress = new InetSocketAddress(serviceAddress.split(":")[0], Integer.parseInt(serviceAddress.split(":")[1]))
-
-
-        return null;
+        String address = serviceAddress.split(":")[0];
+        String port = serviceAddress.split(":")[1];
+        InetSocketAddress socketAddress = new InetSocketAddress(address, Integer.parseInt(port));
+        return socketAddress;
     }
 }

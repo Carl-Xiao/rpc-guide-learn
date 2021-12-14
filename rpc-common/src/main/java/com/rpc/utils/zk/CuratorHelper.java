@@ -24,7 +24,7 @@ public class CuratorHelper {
     private static final Logger logger = LoggerFactory.getLogger(CuratorHelper.class);
     private static final int SLEEP_MS_BETWEEN_RETRIES = 100;
     private static final int MAX_RETRIES = 3;
-    private static final String CONNECT_STRING = "127.0.0.1:2181";
+    private static final String CONNECT_STRING = "127.0.0.1:2080";
     private static final int CONNECTION_TIMEOUT_MS = 10 * 1000;
     private static final int SESSION_TIMEOUT_MS = 60 * 1000;
     public static final String ZK_REGISTER_ROOT_PATH = "/rpc-common";
