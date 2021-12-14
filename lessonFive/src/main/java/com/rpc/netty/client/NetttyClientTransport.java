@@ -2,7 +2,9 @@ package com.rpc.netty.client;
 
 import com.rpc.model.RpcRequest;
 import com.rpc.model.RpcResponse;
+import com.rpc.registry.ServiceDiscovery;
 import com.rpc.registry.ServiceRegistry;
+import com.rpc.registry.impl.ZkDiscovery;
 import com.rpc.registry.impl.ZkServiceRegistry;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
@@ -14,17 +16,17 @@ import java.net.InetSocketAddress;
 public class NetttyClientTransport implements RpcClient {
 
     private ChannelClientProvider channelClientProvider;
-    private ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
     public NetttyClientTransport(ChannelClientProvider channelClientProvider) {
-        this.serviceRegistry = new ZkServiceRegistry();
+        this.serviceDiscovery = new ZkDiscovery();
         this.channelClientProvider = channelClientProvider;
     }
 
     @Override
     public Object sendRpcRequest(RpcRequest rpcRequest) {
         try {
-            InetSocketAddress inetSocketAddress = serviceRegistry.getService(rpcRequest.getInterfaceName());
+            InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest.getInterfaceName());
             Channel futureChannel = channelClientProvider.get(inetSocketAddress);
             if (futureChannel != null) {
                 futureChannel.writeAndFlush(rpcRequest).addListener(future -> {

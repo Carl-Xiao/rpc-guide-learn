@@ -27,15 +27,4 @@ public class ZkServiceRegistry implements ServiceRegistry {
         CuratorHelper.createEphemeralNode(zkClient, servicePath.toString());
         logger.info("节点创建成功，节点为:{}", servicePath);
     }
-
-    public InetSocketAddress getService(String serviceName) {
-        //TODO 负载均衡算法添加
-
-
-        String serviceAddress = CuratorHelper.getChildrenNodes(zkClient, serviceName).get(0);
-        String address = serviceAddress.split(":")[0];
-        String port = serviceAddress.split(":")[1];
-        InetSocketAddress socketAddress = new InetSocketAddress(address, Integer.parseInt(port));
-        return socketAddress;
-    }
 }
