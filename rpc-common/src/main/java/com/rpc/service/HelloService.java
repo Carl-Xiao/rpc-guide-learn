@@ -1,5 +1,7 @@
 package com.rpc.service;
 
+import com.rpc.model.RpcResponse;
+
 /**
  * @description: hello service
  * @author：carl
@@ -7,4 +9,6 @@ package com.rpc.service;
  */
 public interface HelloService {
     String hello(String word);
+
+    RpcResponse<String> helloRpc(String word);
 }

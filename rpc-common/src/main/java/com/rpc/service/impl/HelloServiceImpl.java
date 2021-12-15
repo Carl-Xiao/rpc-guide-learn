@@ -1,6 +1,9 @@
 package com.rpc.service.impl;
 
+import com.rpc.model.RpcResponse;
 import com.rpc.service.HelloService;
+
+import java.util.UUID;
 
 /**
  * @description: 抽奖系统
@@ -11,5 +14,10 @@ public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(String word) {
         return "xbw";
+    }
+
+    @Override
+    public RpcResponse<String> helloRpc(String word) {
+        return RpcResponse.success(word, UUID.randomUUID().toString());
     }
 }

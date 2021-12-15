@@ -2,11 +2,13 @@ package com.rpc.proxy;
 
 import cn.hutool.core.util.IdUtil;
 import com.rpc.model.RpcRequest;
+import com.rpc.model.RpcResponse;
 import com.rpc.netty.client.RpcClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @description: 动态代理类。当动态代理对象调用一个方法的时候，实际调用的是下面的 invoke 方法。
@@ -53,7 +55,9 @@ public class RpcClientProxy implements InvocationHandler {
                 .interfaceName(method.getDeclaringClass().getName())
                 .paramTypes(method.getParameterTypes())
                 .build();
-        Object object = rpcClient.sendRpcRequest(rpcRequest);
+        //shiyong yibu
+        CompletableFuture<RpcResponse> completableFuture = rpcClient.sendFutureRpcRequest(rpcRequest);
+        Object object = completableFuture.get().getData();
         return object;
     }
 

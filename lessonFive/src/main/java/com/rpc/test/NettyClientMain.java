@@ -1,5 +1,6 @@
 package com.rpc.test;
 
+import com.rpc.model.RpcResponse;
 import com.rpc.netty.client.ChannelClientProvider;
 import com.rpc.netty.client.NetttyClientTransport;
 import com.rpc.netty.client.NettyClient;
@@ -25,8 +26,8 @@ public class NettyClientMain {
         RpcClient rpcClient = new NetttyClientTransport(channelClientProvider);
         RpcClientProxy rpcClientProxy = new RpcClientProxy(rpcClient);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
-        String hello = helloService.hello("this is a ok");
-        System.out.println(hello);
+        RpcResponse<String> hello = helloService.helloRpc("this is a ok");
+        System.out.println(hello.getData());
     }
 
 }
