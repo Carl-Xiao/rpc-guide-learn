@@ -20,7 +20,7 @@ public class ZkServiceRegistry implements ServiceRegistry {
         zkClient = CuratorHelper.getZkClient();
         zkClient.start();
     }
-
+    @Override
     public void register(String service, InetSocketAddress socketAddress) {
         StringBuilder servicePath = new StringBuilder(CuratorHelper.ZK_REGISTER_ROOT_PATH).append("/").append(service);
         servicePath.append(socketAddress.toString());

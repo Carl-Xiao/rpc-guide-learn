@@ -9,12 +9,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * @description: 请求代理
+ * @description: 动态代理类。当动态代理对象调用一个方法的时候，实际调用的是下面的 invoke 方法。
+ * 正是因为动态代理才让客户端调用的远程方法像是调用本地方法一样（屏蔽了中间过程）
  * @author：carl
  * @date: 2021/12/4
  */
 public class RpcClientProxy implements InvocationHandler {
-
     /**
      * 用于发送请求给服务端，对应netty两种实现方式
      */

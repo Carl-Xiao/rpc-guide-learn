@@ -1,5 +1,6 @@
 package com.rpc.handler;
 
+import com.rpc.exception.RpcException;
 import com.rpc.model.RpcRequest;
 import com.rpc.model.RpcResponse;
 import com.rpc.model.RpcResponseCode;
@@ -22,23 +23,26 @@ public class RpcRequestHandler {
 
     public Object handle(RpcRequest rpcRequest) {
         Object result = null;
-        try {
-            //从注册中心获取service
-            Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
-            result = invokeTargetMethod(rpcRequest, service);
-            log.info("service:{} successful invoke method:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            log.error("occur exception", e);
-        }
+        //从注册中心获取service
+        Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
+        result = invokeTargetMethod(rpcRequest, service);
+        log.info("service:{} successful invoke method:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
         return result;
     }
 
-    private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
-        if (null == method) {
-            return RpcResponse.fail(RpcResponseCode.NOT_FOUND_METHOD);
+    private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) {
+        Object result = null;
+        try {
+            Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
+            if (null == method) {
+                return RpcResponse.fail(RpcResponseCode.NOT_FOUND_METHOD);
+            }
+            log.info("service:[{}] successful invoke method:[{}]", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+            result = method.invoke(service, rpcRequest.getParameters());
+        } catch (Exception e) {
+            throw new RpcException(e.getMessage(), e);
         }
-        return method.invoke(service, rpcRequest.getParameters());
+        return result;
     }
 
 }
