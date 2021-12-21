@@ -1,5 +1,6 @@
 package com.rpc.model;
 
+import com.rpc.enums.RpcMessageTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,4 +38,7 @@ public class RpcRequest implements Serializable {
      * 参数类型
      */
     private Class<?>[] paramTypes;
+
+    private RpcMessageTypeEnum rpcMessageTypeEnum;
+
 }
