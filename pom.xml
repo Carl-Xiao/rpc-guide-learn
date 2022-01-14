@@ -18,6 +18,7 @@
         <module>lessonFive</module>
         <module>lessonSix</module>
         <module>netty-code-server</module>
+        <module>mini-rpc</module>
     </modules>
 
     <properties>
