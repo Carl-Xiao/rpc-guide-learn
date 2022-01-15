@@ -1,6 +1,8 @@
 package com.mini.provider.config;
 
 import com.mini.provider.ServerProvider;
+import com.mini.rpc.registry.RegistryFactory;
+import com.mini.rpc.registry.RegistryService;
 import com.mini.rpc.registry.RegistryType;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +20,11 @@ public class RpcProviderAutoConfiguration {
     @Resource
     private RpcProperties rpcProperties;
 
-
     @Bean
     public ServerProvider init() throws Exception {
         RegistryType type = RegistryType.valueOf(rpcProperties.getRegistryType());
         RegistryService serviceRegistry = RegistryFactory.getInstance(rpcProperties.getRegistryAddr(), type);
-        return new RpcProvider(rpcProperties.getServicePort(), serviceRegistry);
+        return new ServerProvider(rpcProperties.getServicePort(), serviceRegistry);
     }
 
 
