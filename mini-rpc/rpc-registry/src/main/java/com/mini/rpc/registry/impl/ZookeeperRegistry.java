@@ -11,6 +11,7 @@ import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -79,6 +80,12 @@ public class ZookeeperRegistry implements RegistryService {
 
 
 
+
         return null;
+    }
+
+    @Override
+    public void destroy() throws IOException {
+        serviceDiscovery.close();
     }
 }
