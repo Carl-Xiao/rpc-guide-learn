@@ -1,5 +1,8 @@
 package com.mini.provider;
 
+import com.mini.rpc.common.RpcServiceHelper;
+import com.mini.rpc.common.ServiceMeta;
+import com.mini.rpc.common.annotion.RpcService;
 import com.mini.rpc.registry.RegistryService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -35,7 +38,6 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
         this.serverPort = serverPort;
         this.serviceRegistry = serviceRegistry;
     }
-
     /**
      * 启动服务
      */
@@ -84,7 +86,7 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
     }
 
     /**
-     * 处理定义的bean
+     * 处理自定义的bean
      *
      * @param bean
      * @param beanName
@@ -93,9 +95,23 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
-
-
-        return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+        RpcService rpcService = bean.getClass().getAnnotation(RpcService.class);
+        if (null == rpcService) {
+            return bean;
+        }
+        Class<?> serviceInterface = rpcService.serviceInterface();
+        String serviceName = serviceInterface.getName();
+        String serviceVersion = rpcService.serviceVersion();
+        try {
+            ServiceMeta serviceMeta = new ServiceMeta();
+            serviceMeta.setServiceAddr(serverAddress);
+            serviceMeta.setServicePort(serverPort);
+            serviceMeta.setServiceName(serviceName);
+            serviceMeta.setServiceVersion(serviceVersion);
+            rpcServiceMap.put(RpcServiceHelper.buildServiceKey(serviceMeta.getServiceName(), serviceMeta.getServiceVersion()), bean);
+        } catch (Exception e) {
+            log.error("failed to register service {}#{}", serviceName, serviceVersion, e);
+        }
+        return bean;
     }
 }
