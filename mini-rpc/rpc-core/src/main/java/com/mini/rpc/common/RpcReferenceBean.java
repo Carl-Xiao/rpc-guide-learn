@@ -1,5 +1,8 @@
 package com.mini.rpc.common;
 
+import com.mini.rpc.registry.RegistryFactory;
+import com.mini.rpc.registry.RegistryService;
+import com.mini.rpc.registry.RegistryType;
 import lombok.Data;
 import org.springframework.beans.factory.FactoryBean;
 
@@ -29,12 +32,14 @@ public class RpcReferenceBean implements FactoryBean<Object> {
 
     @Override
     public Class<?> getObjectType() {
-
         return interfaceClass;
     }
 
     // TODO 生成动态代理对象并赋值给 object
     public void init() throws Exception {
+        RegistryService registryService = RegistryFactory.getInstance(this.registryAddr, RegistryType.valueOf(this.registryType));
+        
+
 
 
 

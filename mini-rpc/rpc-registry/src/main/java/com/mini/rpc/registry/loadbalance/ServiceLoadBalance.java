@@ -1,4 +1,4 @@
-package com.mini.rpc.registry;
+package com.mini.rpc.registry.loadbalance;
 
 import java.util.List;
 
@@ -8,5 +8,4 @@ import java.util.List;
  **/
 public interface ServiceLoadBalance<T> {
     T select(List<T> servers, int hashcode);
-
 }
