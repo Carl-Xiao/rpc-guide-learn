@@ -1,5 +1,8 @@
 package com.mini.provider;
 
+import com.mini.codec.MiniRpcDecoder;
+import com.mini.codec.MiniRpcEncoder;
+import com.mini.handler.RpcRequestHandler;
 import com.mini.rpc.common.RpcServiceHelper;
 import com.mini.rpc.common.ServiceMeta;
 import com.mini.rpc.common.annotion.RpcService;
@@ -38,6 +41,7 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
         this.serverPort = serverPort;
         this.serviceRegistry = serviceRegistry;
     }
+
     /**
      * 启动服务
      */
@@ -53,8 +57,10 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-
-
+                            socketChannel.pipeline()
+                                    .addLast(new MiniRpcEncoder())
+                                    .addLast(new MiniRpcDecoder())
+                                    .addLast(new RpcRequestHandler(rpcServiceMap));
                         }
                     })
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -108,6 +114,9 @@ public class ServerProvider implements InitializingBean, BeanPostProcessor {
             serviceMeta.setServicePort(serverPort);
             serviceMeta.setServiceName(serviceName);
             serviceMeta.setServiceVersion(serviceVersion);
+            //注册服务
+            serviceRegistry.register(serviceMeta);
+            //本地缓存map
             rpcServiceMap.put(RpcServiceHelper.buildServiceKey(serviceMeta.getServiceName(), serviceMeta.getServiceVersion()), bean);
         } catch (Exception e) {
             log.error("failed to register service {}#{}", serviceName, serviceVersion, e);

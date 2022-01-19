@@ -1,14 +1,21 @@
-package com.mini.rpc.common;
+package com.mini.rpc.consumer.proxy;
 
 import com.mini.protocol.MiniRpcProtocol;
 import com.mini.protocol.MsgHeader;
 import com.mini.protocol.MsgType;
 import com.mini.protocol.ProtocolConstants;
+import com.mini.rpc.common.MiniRpcFuture;
+import com.mini.rpc.common.MiniRpcRequest;
+import com.mini.rpc.common.MiniRpcRequestHolder;
+import com.mini.rpc.common.MiniRpcResponse;
 import com.mini.rpc.registry.RegistryService;
 import com.mini.serizlization.SerializationTypeEnum;
+import io.netty.channel.DefaultEventLoop;
+import io.netty.util.concurrent.DefaultPromise;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author carl-xiao
@@ -56,9 +63,12 @@ public class RpcInvokerProxy implements InvocationHandler {
         request.setParams(args);
         protocol.setBody(request);
 
+        //rpc 请求
+        RpcConsumer rpcConsumer = new RpcConsumer();
+        MiniRpcFuture<MiniRpcResponse> future = new MiniRpcFuture<>(new DefaultPromise<>(new DefaultEventLoop()), timeout);
+        MiniRpcRequestHolder.REQUEST_MAP.put(requestId, future);
+        rpcConsumer.sendRequest(protocol, this.registryService);
 
-
-
-        return null;
+        return future.getPromise().get(future.getTimeout(), TimeUnit.MILLISECONDS).getData();
     }
 }

@@ -1,4 +1,4 @@
-package com.mini.rpc.common;
+package com.mini.rpc.consumer.proxy;
 
 import com.mini.rpc.common.annotion.RpcReference;
 import lombok.extern.slf4j.Slf4j;

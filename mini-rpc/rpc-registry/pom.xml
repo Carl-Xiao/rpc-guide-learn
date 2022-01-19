@@ -21,10 +21,6 @@
         </dependency>
         <dependency>
             <groupId>com.mini.rpc</groupId>
-            <artifactId>rpc-registry</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.mini.rpc</groupId>
             <artifactId>rpc-protocol</artifactId>
         </dependency>
         <dependency>

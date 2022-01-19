@@ -26,6 +26,4 @@ public class RpcProviderAutoConfiguration {
         RegistryService serviceRegistry = RegistryFactory.getInstance(rpcProperties.getRegistryAddr(), type);
         return new ServerProvider(rpcProperties.getServicePort(), serviceRegistry);
     }
-
-
 }
